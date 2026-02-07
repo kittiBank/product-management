@@ -48,10 +48,10 @@
       @change="handleInput"
       :required="required"
       :class="[
-        'w-full px-3 py-2.5 border rounded text-sm cursor-pointer bg-white transition-colors box-border',
+        'w-full px-3 py-2.5 border rounded text-sm cursor-pointer bg-gradient-to-b from-white to-gray-50 transition-all box-border h-[42px] hover:border-primary-400 hover:shadow-sm',
         errorMessage
-          ? 'border-red-500 focus:outline-none focus:border-red-500'
-          : 'border-gray-300 focus:outline-none focus:border-primary-500'
+          ? 'border-red-500 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-200'
+          : 'border-gray-300 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200'
       ]"
     >
       <option value="" disabled>{{ placeholder || "เลือก..." }}</option>

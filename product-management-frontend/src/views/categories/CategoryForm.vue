@@ -1,11 +1,12 @@
 <!-- Category Form View - เพิ่ม/แก้ไขหมวดหมู่ -->
 <template>
   <AppLayout>
-    <div class="mb-6">
-      <h2 class="m-0 text-gray-800 text-[28px]">{{ isEditMode ? "Edit Category" : "Add Category" }}</h2>
-    </div>
+    <div class="flex flex-col items-center pt-8">
+      <div class="mb-6">
+        <h2 class="m-0 text-gray-800 text-[28px] text-center">{{ isEditMode ? "Edit Category" : "Add Category" }}</h2>
+      </div>
 
-    <div class="bg-white p-6 rounded-lg shadow-sm max-w-[600px]">
+      <div class="bg-white p-6 rounded-lg shadow-sm max-w-[600px] w-full">
       <form @submit.prevent="handleSubmit">
         <FormInput
           id="name"
@@ -35,6 +36,7 @@
           </button>
         </div>
       </form>
+      </div>
     </div>
   </AppLayout>
 </template>

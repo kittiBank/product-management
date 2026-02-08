@@ -4,14 +4,18 @@ const productService = require("../services/productService");
 // GET /products - Get all products with pagination
 const getAllProducts = async (req, res, next) => {
   try {
-    // TODO: Extract query params (page, limit, search)
-    // TODO: Call productService.getAllProducts()
-    // TODO: Return response
-
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || '';
+    const categoryId = req.query.categoryId || null;
+    
+    const result = await productService.getAllProducts(page, limit, search, categoryId);
+    
     return res.status(200).json({
       success: true,
-      message: "getAllProducts working",
-      data: [],
+      message: "Products retrieved successfully",
+      data: result.products,
+      pagination: result.pagination
     });
   } catch (error) {
     next(error);
@@ -21,15 +25,13 @@ const getAllProducts = async (req, res, next) => {
 // GET /product/:id - Get product by ID
 const getProductById = async (req, res, next) => {
   try {
-    // TODO: Extract id from params
-    // TODO: Call productService.getProductById()
-    // TODO: Return response
-
     const { id } = req.params;
+    const product = await productService.getProductById(id);
+    
     return res.status(200).json({
       success: true,
-      message: "getProductById working",
-      data: { id },
+      message: "Product retrieved successfully",
+      data: product
     });
   } catch (error) {
     next(error);
@@ -39,15 +41,13 @@ const getProductById = async (req, res, next) => {
 // POST /product - Create new product
 const createProduct = async (req, res, next) => {
   try {
-    // TODO: Extract data from req.body
-    // TODO: Validate input
-    // TODO: Call productService.createProduct()
-    // TODO: Return response
-
+    const productData = req.body;
+    const product = await productService.createProduct(productData);
+    
     return res.status(201).json({
       success: true,
-      message: "createProduct working",
-      data: req.body,
+      message: "Product created successfully",
+      data: product
     });
   } catch (error) {
     next(error);
@@ -57,16 +57,14 @@ const createProduct = async (req, res, next) => {
 // PUT /product/:id - Update product
 const updateProduct = async (req, res, next) => {
   try {
-    // TODO: Extract id from params and data from body
-    // TODO: Validate input
-    // TODO: Call productService.updateProduct()
-    // TODO: Return response
-
     const { id } = req.params;
+    const productData = req.body;
+    const product = await productService.updateProduct(id, productData);
+    
     return res.status(200).json({
       success: true,
-      message: "updateProduct working",
-      data: { id, ...req.body },
+      message: "Product updated successfully",
+      data: product
     });
   } catch (error) {
     next(error);
@@ -76,16 +74,14 @@ const updateProduct = async (req, res, next) => {
 // DELETE /product/:id - Delete product
 const deleteProduct = async (req, res, next) => {
   try {
-    // TODO: Extract id from params
-    // TODO: Determine soft/hard delete from query
-    // TODO: Call productService.deleteProduct()
-    // TODO: Return response
-
     const { id } = req.params;
+    const softDelete = req.query.soft !== 'false'; // Default to soft delete
+    const product = await productService.deleteProduct(id, softDelete);
+    
     return res.status(200).json({
       success: true,
-      message: "deleteProduct working",
-      data: { id },
+      message: `Product ${softDelete ? 'soft' : 'hard'} deleted successfully`,
+      data: product
     });
   } catch (error) {
     next(error);

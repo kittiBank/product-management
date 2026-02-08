@@ -4,14 +4,17 @@ const categoryService = require("../services/categoryService");
 // GET /categories - Get all categories with pagination
 const getAllCategories = async (req, res, next) => {
   try {
-    // TODO: Extract query params (page, limit, search)
-    // TODO: Call categoryService.getAllCategories()
-    // TODO: Return response
-
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || '';
+    
+    const result = await categoryService.getAllCategories(page, limit, search);
+    
     return res.status(200).json({
       success: true,
-      message: "getAllCategories working",
-      data: [],
+      message: "Categories retrieved successfully",
+      data: result.categories,
+      pagination: result.pagination
     });
   } catch (error) {
     next(error);
@@ -21,15 +24,13 @@ const getAllCategories = async (req, res, next) => {
 // GET /category/:id - Get category by ID
 const getCategoryById = async (req, res, next) => {
   try {
-    // TODO: Extract id from params
-    // TODO: Call categoryService.getCategoryById()
-    // TODO: Return response
-
     const { id } = req.params;
+    const category = await categoryService.getCategoryById(id);
+    
     return res.status(200).json({
       success: true,
-      message: "getCategoryById working",
-      data: { id },
+      message: "Category retrieved successfully",
+      data: category
     });
   } catch (error) {
     next(error);
@@ -39,15 +40,13 @@ const getCategoryById = async (req, res, next) => {
 // POST /category - Create new category
 const createCategory = async (req, res, next) => {
   try {
-    // TODO: Extract data from req.body
-    // TODO: Validate input
-    // TODO: Call categoryService.createCategory()
-    // TODO: Return response
-
+    const categoryData = req.body;
+    const category = await categoryService.createCategory(categoryData);
+    
     return res.status(201).json({
       success: true,
-      message: "createCategory working",
-      data: req.body,
+      message: "Category created successfully",
+      data: category
     });
   } catch (error) {
     next(error);
@@ -57,16 +56,14 @@ const createCategory = async (req, res, next) => {
 // PUT /category/:id - Update category
 const updateCategory = async (req, res, next) => {
   try {
-    // TODO: Extract id from params and data from body
-    // TODO: Validate input
-    // TODO: Call categoryService.updateCategory()
-    // TODO: Return response
-
     const { id } = req.params;
+    const categoryData = req.body;
+    const category = await categoryService.updateCategory(id, categoryData);
+    
     return res.status(200).json({
       success: true,
-      message: "updateCategory working",
-      data: { id, ...req.body },
+      message: "Category updated successfully",
+      data: category
     });
   } catch (error) {
     next(error);
@@ -76,16 +73,14 @@ const updateCategory = async (req, res, next) => {
 // DELETE /category/:id - Delete category
 const deleteCategory = async (req, res, next) => {
   try {
-    // TODO: Extract id from params
-    // TODO: Determine soft/hard delete from query
-    // TODO: Call categoryService.deleteCategory()
-    // TODO: Return response
-
     const { id } = req.params;
+    const softDelete = req.query.soft !== 'false'; // Default to soft delete
+    const category = await categoryService.deleteCategory(id, softDelete);
+    
     return res.status(200).json({
       success: true,
-      message: "deleteCategory working",
-      data: { id },
+      message: `Category ${softDelete ? 'soft' : 'hard'} deleted successfully`,
+      data: category
     });
   } catch (error) {
     next(error);

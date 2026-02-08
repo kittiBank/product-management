@@ -1,6 +1,4 @@
 import type { Product, ProductFormData } from "../types/product";
-import { categoryService } from "./categoryService";
-import { productMockData } from "../mockData/products";
 import apiClient from "../config/api";
 
 // API response type for pagination

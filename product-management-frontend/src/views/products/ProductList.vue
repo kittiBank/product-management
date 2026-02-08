@@ -65,6 +65,7 @@ import AppLayout from "../../components/layout/AppLayout.vue";
 import DataTable from "../../components/common/DataTable.vue";
 import { productService } from "../../services/productService";
 import type { Product } from "../../types/product";
+import { showError, showSuccess, showConfirm } from "../../utils/toast";
 
 const router = useRouter();
 const products = ref<Product[]>([]);
@@ -114,7 +115,7 @@ const loadProducts = async () => {
     totalItems.value = result.pagination.totalItems;
   } catch (error) {
     console.error("Error loading products:", error);
-    alert("Error loading products data");
+    showError("Error loading products data");
   }
 };
 
@@ -142,14 +143,21 @@ const editProduct = (id: number | string) => {
 
 // Delete product with confirmation
 const deleteProduct = async (id: number | string) => {
-  if (confirm("Are you sure you want to delete this product?")) {
+  const confirmed = await showConfirm(
+    "Are you sure?",
+    "Do you want to delete this product?",
+    "Confirm",
+    "Cancel"
+  );
+  
+  if (confirmed) {
     try {
       await productService.delete(id);
       await loadProducts();
-      alert("Product deleted successfully");
+      showSuccess("Product deleted successfully");
     } catch (error) {
       console.error("Error deleting product:", error);
-      alert("Error deleting product");
+      showError("Error deleting product");
     }
   }
 };

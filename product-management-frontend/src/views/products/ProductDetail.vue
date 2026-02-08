@@ -66,6 +66,7 @@ import { useRouter, useRoute } from "vue-router";
 import AppLayout from "../../components/layout/AppLayout.vue";
 import { productService } from "../../services/productService";
 import type { Product } from "../../types/product";
+import { showError } from "../../utils/toast";
 
 const router = useRouter();
 const route = useRoute();
@@ -82,12 +83,12 @@ const loadProduct = async () => {
   try {
     product.value = await productService.getById(productId.value);
     if (!product.value) {
-      alert("Product not found");
+      showError("Product not found");
       router.push("/products");
     }
   } catch (error) {
     console.error("Error loading product:", error);
-    alert("Error loading data");
+    showError("Error loading data");
   }
 };
 
@@ -97,11 +98,6 @@ const formatCurrency = (value: number) => {
     style: "currency",
     currency: "THB",
   }).format(value);
-};
-
-// Format number
-const formatNumber = (value: number) => {
-  return new Intl.NumberFormat("th-TH").format(value);
 };
 
 // Format date

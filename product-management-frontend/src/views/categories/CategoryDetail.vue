@@ -46,10 +46,11 @@ import { useRouter, useRoute } from "vue-router";
 import AppLayout from "../../components/layout/AppLayout.vue";
 import { categoryService } from "../../services/categoryService";
 import type { Category } from "../../types/category";
+import { showError } from "../../utils/toast";
 
 const router = useRouter();
 const route = useRoute();
-const categoryId = computed(() => parseInt(route.params.id as string));
+const categoryId = computed(() => route.params.id as string);
 const category = ref<Category | null>(null);
 
 // Load category on mount
@@ -62,12 +63,12 @@ const loadCategory = async () => {
   try {
     category.value = await categoryService.getById(categoryId.value);
     if (!category.value) {
-      alert("Category not found");
+      showError("Category not found");
       router.push("/categories");
     }
   } catch (error) {
     console.error("Error loading category:", error);
-    alert("Error loading data");
+    showError("Error loading data");
   }
 };
 

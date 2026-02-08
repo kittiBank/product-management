@@ -83,10 +83,10 @@ import { categoryService } from "../../services/categoryService";
 import {
   required,
   positiveNumber,
-  nonNegativeNumber,
 } from "../../utils/validation";
 import type { ProductFormData } from "../../types/product";
 import type { Category } from "../../types/category";
+import { showError, showSuccess } from "../../utils/toast";
 
 const router = useRouter();
 const route = useRoute();
@@ -131,10 +131,11 @@ onMounted(async () => {
 // Load categories
 const loadCategories = async () => {
   try {
-    categories.value = await categoryService.getAll();
+    const result = await categoryService.getAll();
+    categories.value = result.categories;
   } catch (error) {
     console.error("Error loading categories:", error);
-    alert("Error loading categories data");
+    showError("Error loading categories data");
   }
 };
 
@@ -151,7 +152,7 @@ const loadProduct = async (id: string) => {
     }
   } catch (error) {
     console.error("Error loading product:", error);
-    alert("Error loading product data");
+    showError("Error loading product data");
   }
 };
 
@@ -204,15 +205,15 @@ const handleSubmit = async () => {
   try {
     if (isEditMode.value && productId.value) {
       await productService.update(productId.value, formData);
-      alert("Product updated successfully");
+      showSuccess("Product updated successfully");
     } else {
       await productService.create(formData);
-      alert("Product added successfully");
+      showSuccess("Product added successfully");
     }
     router.push("/products");
   } catch (error) {
     console.error("Error saving product:", error);
-    alert("Error saving data");
+    showError("Error saving data");
   }
 };
 

@@ -21,7 +21,15 @@ It allows users to manage products and categories through an intuitive web inter
 
 ## How to Run
 
-1. Navigate to the back-end directory:
+### 1: Clone the Repository
+```bash
+git clone https://github.com/kittiBank/product-management.git
+cd product-management
+```
+
+### 2: Backend Setup
+
+1. Navigate to the backend directory:
 ```bash
 cd product-management-backend
 ```
@@ -31,28 +39,45 @@ cd product-management-backend
 npm install
 ```
 
-3. Start the development server:
+3. Create environment file:
+```bash
+cp dev.env.example dev.env
+```
+
+4. Open `dev.env` and replace only Username and Password for MongoDB connection string URI:
+```env
+PORT=3000
+MONGODB_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/product-management
+NODE_ENV=development
+```
+
+5. Start the backend server:
 ```bash
 npm run dev
 ```
 The backend will run on `http://localhost:3000`
 
-4. Navigate to the front-end directory:
+### 3: Frontend Setup
+
+1. Open a new terminal and navigate to the frontend directory:
 ```bash
 cd product-management-frontend
 ```
 
-5. Install dependencies:
+2. Install dependencies:
 ```bash
 npm install
 ```
 
-6. Start the development server:
+3. Start the frontend server:
 ```bash
 npm run dev
 ```
 
 The frontend will run on `http://localhost:5173`
+
+### 4: Access the Application
+Open your browser and go to `http://localhost:5173`
 
 
 ## Project Structure

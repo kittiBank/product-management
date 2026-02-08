@@ -1,10 +1,10 @@
 // Product type definitions
 export interface Product {
-  id: number;
+  id: number | string;
   name: string;
   description: string;
   price: number;
-  categoryId: number;
+  categoryId: number | string;
   categoryName?: string;
   stock: number;
   createdAt: string;
@@ -15,6 +15,6 @@ export interface ProductFormData {
   name: string;
   description: string;
   price: number;
-  categoryId: number;
+  categoryId: number | string;
   stock: number;
 }

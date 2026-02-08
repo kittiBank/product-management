@@ -1,17 +1,36 @@
 import type { Category, CategoryFormData } from "../types/category";
 import { categoryMockData } from "../mockData/categories";
+import apiClient from "../config/api";
 
 // Mock API service for categories
 export const categoryService = {
-  // Get all categories
+  // Get all categories - Now using real API
   async getAll(): Promise<Category[]> {
-    return new Promise((resolve) => {
-      setTimeout(() => resolve([...categoryMockData.getAll()]), 300);
-    });
+    try {
+      const response = await apiClient.get<{
+        success: boolean;
+        message: string;
+        data: any[];
+        pagination?: any;
+      }>('/categories', {
+        params: { page: 1, limit: 100 }
+      });
+
+      return response.data.data.map((category: any) => ({
+        id: category._id,
+        name: category.name,
+        description: category.description || '',
+        createdAt: category.createdAt,
+        updatedAt: category.updatedAt,
+      }));
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+      throw error;
+    }
   },
 
   // Get category by ID
-  async getById(id: number): Promise<Category | null> {
+  async getById(id: number | string): Promise<Category | null> {
     return new Promise((resolve) => {
       setTimeout(() => {
         const category = categoryMockData.getAll().find((c) => c.id === id);
@@ -37,7 +56,7 @@ export const categoryService = {
   },
 
   // Update category
-  async update(id: number, data: CategoryFormData): Promise<Category | null> {
+  async update(id: number | string, data: CategoryFormData): Promise<Category | null> {
     return new Promise((resolve) => {
       setTimeout(() => {
         const index = categoryMockData.findIndex((c) => c.id === id);
@@ -64,7 +83,7 @@ export const categoryService = {
   },
 
   // Delete category
-  async delete(id: number): Promise<boolean> {
+  async delete(id: number | string): Promise<boolean> {
     return new Promise((resolve) => {
       setTimeout(() => {
         const index = categoryMockData.findIndex((c) => c.id === id);

@@ -3,73 +3,71 @@
   <AppLayout>
     <div class="flex flex-col items-center pt-8">
       <div class="mb-6">
-        <h2 class="m-0 text-gray-800 text-[28px] text-center">{{ isEditMode ? "Edit Product" : "Add Product" }}</h2>
+        <h2 class="m-0 text-gray-800 text-[28px] text-center">
+          {{ isEditMode ? "Edit Product" : "Add Product" }}
+        </h2>
       </div>
 
       <div class="bg-white p-6 rounded-lg shadow-sm max-w-[600px] w-full">
-      <form @submit.prevent="handleSubmit">
-        <FormInput
-          id="name"
-          label="Product Name"
-          v-model="formData.name"
-          :required="true"
-          :error-message="errors.name"
-          placeholder="Enter product name"
-        />
+        <form @submit.prevent="handleSubmit">
+          <FormInput
+            id="name"
+            label="Product Name"
+            v-model="formData.name"
+            :required="true"
+            :error-message="errors.name"
+            placeholder="Enter product name"
+          />
 
-        <FormInput
-          id="description"
-          label="Description"
-          type="textarea"
-          v-model="formData.description"
-          :required="true"
-          :error-message="errors.description"
-          placeholder="Enter product description"
-        />
+          <FormInput
+            id="description"
+            label="Description"
+            type="textarea"
+            v-model="formData.description"
+            :required="true"
+            :error-message="errors.description"
+            placeholder="Enter product description"
+          />
 
-        <FormInput
-          id="categoryId"
-          label="Category"
-          type="select"
-          v-model="formData.categoryId"
-          :required="true"
-          :error-message="errors.categoryId"
-          :options="categoryOptions"
-          placeholder="Select category"
-        />
+          <FormInput
+            id="categoryId"
+            label="Category"
+            type="select"
+            v-model="formData.categoryId"
+            :required="true"
+            :error-message="errors.categoryId"
+            :options="categoryOptions"
+            placeholder="Select category"
+          />
 
-        <FormInput
-          id="price"
-          label="Price (THB)"
-          type="number"
-          v-model="formData.price"
-          :required="true"
-          :error-message="errors.price"
-          :min="0"
-          :step="0.01"
-          placeholder="0.00"
-        />
+          <FormInput
+            id="price"
+            label="Price (THB)"
+            type="number"
+            v-model="formData.price"
+            :required="true"
+            :error-message="errors.price"
+            :min="0"
+            :step="0.01"
+            placeholder="0.00"
+          />
 
-        <FormInput
-          id="stock"
-          label="Stock Quantity"
-          type="number"
-          v-model="formData.stock"
-          :required="true"
-          :error-message="errors.stock"
-          :min="0"
-          placeholder="0"
-        />
-
-        <div class="flex gap-3 justify-end mt-6">
-          <button type="button" @click="goBack" class="px-5 py-2.5 border-0 rounded cursor-pointer text-base font-medium transition-opacity hover:opacity-80 bg-gray-600 text-white">
-            Cancel
-          </button>
-          <button type="submit" class="px-5 py-2.5 border-0 rounded cursor-pointer text-base font-medium transition-opacity hover:opacity-80 bg-primary-500 text-white">
-            {{ isEditMode ? "Save" : "Add" }}
-          </button>
-        </div>
-      </form>
+          <div class="flex gap-3 justify-end mt-6">
+            <button
+              type="button"
+              @click="goBack"
+              class="px-5 py-2.5 border-0 rounded cursor-pointer text-base font-medium transition-opacity hover:opacity-80 bg-gray-600 text-white"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="px-5 py-2.5 border-0 rounded cursor-pointer text-base font-medium transition-opacity hover:opacity-80 bg-primary-500 text-white"
+            >
+              {{ isEditMode ? "Save" : "Add" }}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </AppLayout>
@@ -92,9 +90,7 @@ import type { Category } from "../../types/category";
 
 const router = useRouter();
 const route = useRoute();
-const productId = computed(() =>
-  route.params.id ? parseInt(route.params.id as string) : null,
-);
+const productId = computed(() => route.params.id as string | undefined);
 const isEditMode = computed(() => !!productId.value);
 
 // Form data
@@ -102,7 +98,7 @@ const formData = reactive<ProductFormData>({
   name: "",
   description: "",
   price: 0,
-  categoryId: 0,
+  categoryId: "",
   stock: 0,
 });
 
@@ -143,7 +139,7 @@ const loadCategories = async () => {
 };
 
 // Load product for editing
-const loadProduct = async (id: number) => {
+const loadProduct = async (id: string) => {
   try {
     const product = await productService.getById(id);
     if (product) {
@@ -184,7 +180,7 @@ const validateForm = (): boolean => {
 
   // Validate category
   const categoryError = required(formData.categoryId, "Category");
-  if (categoryError || formData.categoryId === 0) {
+  if (categoryError || !formData.categoryId) {
     errors.categoryId = "Please select a category";
     isValid = false;
   }
@@ -193,13 +189,6 @@ const validateForm = (): boolean => {
   const priceError = positiveNumber(formData.price, "Price");
   if (priceError) {
     errors.price = priceError.message;
-    isValid = false;
-  }
-
-  // Validate stock
-  const stockError = nonNegativeNumber(formData.stock, "Stock Quantity");
-  if (stockError) {
-    errors.stock = stockError.message;
     isValid = false;
   }
 

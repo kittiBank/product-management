@@ -1,6 +1,6 @@
 // Category type definitions
 export interface Category {
-  id: number;
+  id: number | string;
   name: string;
   description: string;
   createdAt: string;

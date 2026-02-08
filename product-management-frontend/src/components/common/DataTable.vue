@@ -17,13 +17,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in data" :key="item.id" class="hover:bg-gray-50 transition-colors">
+        <tr v-for="(item, index) in data" :key="item.id" class="hover:bg-gray-50 transition-colors">
           <td
             v-for="column in columns"
             :key="column.key"
             class="px-3 py-3 border-b border-gray-200 text-gray-600"
           >
-            {{ formatValue(item[column.key], column.format) }}
+            {{ column.key === 'no' ? startIndex + index + 1 : formatValue(item[column.key], column.format) }}
           </td>
           <td v-if="showActions" class="px-3 py-3 border-b border-gray-200">
             <div class="flex gap-2">
@@ -73,17 +73,19 @@ interface Props {
   columns: Column[];
   data: any[];
   showActions?: boolean;
+  startIndex?: number; // For pagination support
 }
 
 withDefaults(defineProps<Props>(), {
   showActions: true,
+  startIndex: 0,
 });
 
 // Events definition
 defineEmits<{
-  view: [id: number];
-  edit: [id: number];
-  delete: [id: number];
+  view: [id: number | string];
+  edit: [id: number | string];
+  delete: [id: number | string];
 }>();
 
 // Format value based on type

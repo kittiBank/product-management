@@ -5,6 +5,8 @@ const productController = require("../controllers/productController");
 const {
   validateProductInput,
   validateProductUpdate,
+  validateObjectId,
+  validatePagination,
 } = require("../middleware/validator");
 
 // GET /products - Get all products with pagination

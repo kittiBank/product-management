@@ -4,8 +4,18 @@
     <div class="flex justify-between items-center mb-6">
       <h2 class="m-0 text-gray-800 text-[28px]">Product Details</h2>
       <div class="flex gap-3">
-        <button @click="editProduct" class="px-5 py-2.5 border-0 rounded cursor-pointer text-base font-medium transition-opacity hover:opacity-80 bg-orange-500 text-white">Edit</button>
-        <button @click="goBack" class="px-5 py-2.5 border-0 rounded cursor-pointer text-base font-medium transition-opacity hover:opacity-80 bg-gray-600 text-white">Back</button>
+        <button
+          @click="editProduct"
+          class="px-5 py-2.5 border-0 rounded cursor-pointer text-base font-medium transition-opacity hover:opacity-80 bg-orange-500 text-white"
+        >
+          Edit
+        </button>
+        <button
+          @click="goBack"
+          class="px-5 py-2.5 border-0 rounded cursor-pointer text-base font-medium transition-opacity hover:opacity-80 bg-gray-600 text-white"
+        >
+          Back
+        </button>
       </div>
     </div>
 
@@ -36,11 +46,6 @@
       </div>
 
       <div class="grid grid-cols-[200px_1fr] py-4 border-b border-gray-200">
-        <span class="font-semibold text-gray-600">Stock:</span>
-        <span class="text-gray-800">{{ formatNumber(product.stock) }}</span>
-      </div>
-
-      <div class="grid grid-cols-[200px_1fr] py-4 border-b border-gray-200">
         <span class="font-semibold text-gray-600">Created At:</span>
         <span class="text-gray-800">{{ formatDate(product.createdAt) }}</span>
       </div>
@@ -64,7 +69,7 @@ import type { Product } from "../../types/product";
 
 const router = useRouter();
 const route = useRoute();
-const productId = computed(() => parseInt(route.params.id as string));
+const productId = computed(() => route.params.id as string);
 const product = ref<Product | null>(null);
 
 // Load product on mount

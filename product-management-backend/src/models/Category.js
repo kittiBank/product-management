@@ -16,13 +16,22 @@ const categorySchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    deletedAt: {
+      type: Date,
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,
   },
 );
 
-// TODO: Add indexes for search optimization
-// TODO: Add methods/statics if needed
+// Indexes for search optimization
+categorySchema.index({ name: "text", description: "text" });
+categorySchema.index({ isDeleted: 1 });
+categorySchema.index({ createdAt: -1 });
 
 module.exports = mongoose.model("Category", categorySchema);

@@ -22,17 +22,16 @@ const productSchema = new mongoose.Schema(
       ref: "Category",
       required: true,
     },
-    stock: {
-      type: Number,
-      default: 0,
-      min: 0,
-    },
-    imageUrl: {
-      type: String,
-    },
     isDeleted: {
       type: Boolean,
       default: false,
+    },
+    deletedAt: {
+      type: Date,
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
     },
   },
   {
@@ -40,7 +39,12 @@ const productSchema = new mongoose.Schema(
   },
 );
 
-// TODO: Add indexes for search optimization
-// TODO: Add methods/statics if needed
+// Indexes for search optimization
+productSchema.index({ name: "text", description: "text" });
+productSchema.index({ categoryId: 1 });
+productSchema.index({ isDeleted: 1 });
+productSchema.index({ price: 1 });
+productSchema.index({ createdAt: -1 });
+productSchema.index({ isActive: 1 });
 
 module.exports = mongoose.model("Product", productSchema);

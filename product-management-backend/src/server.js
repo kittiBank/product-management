@@ -24,8 +24,8 @@ const PORT = process.env.PORT || 3000;
 // Start server
 const startServer = async () => {
   try {
-    // TODO: Uncomment when database logic is implemented
-    // await connectDB();
+    // Connect to MongoDB Atlas
+    await connectDB();
 
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);

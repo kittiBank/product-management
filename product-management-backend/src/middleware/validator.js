@@ -230,9 +230,63 @@ const validateCategoryUpdate = (req, res, next) => {
   next();
 };
 
+// Validate MongoDB ObjectId
+const validateObjectId = (req, res, next) => {
+  const { id } = req.params;
+  
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid ID format",
+    });
+  }
+  
+  next();
+};
+
+// Validate Pagination Parameters
+const validatePagination = (req, res, next) => {
+  const { page, limit } = req.query;
+  const errors = [];
+  
+  // Validate page if provided
+  if (page !== undefined) {
+    const pageNum = parseInt(page);
+    if (isNaN(pageNum) || pageNum < 1) {
+      errors.push({
+        field: "page",
+        message: "Page must be a positive integer",
+      });
+    }
+  }
+  
+  // Validate limit if provided
+  if (limit !== undefined) {
+    const limitNum = parseInt(limit);
+    if (isNaN(limitNum) || limitNum < 1 || limitNum > 100) {
+      errors.push({
+        field: "limit",
+        message: "Limit must be an integer between 1 and 100",
+      });
+    }
+  }
+  
+  if (errors.length > 0) {
+    return res.status(400).json({
+      success: false,
+      message: "Validation failed",
+      errors,
+    });
+  }
+  
+  next();
+};
+
 module.exports = {
   validateProductInput,
   validateProductUpdate,
   validateCategoryInput,
   validateCategoryUpdate,
+  validateObjectId,
+  validatePagination,
 };

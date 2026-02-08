@@ -34,7 +34,7 @@ const categories = ref<Category[]>([]);
 
 // Define table columns
 const columns = [
-  { key: "id", label: "ID" },
+  { key: "no", label: "No" },
   { key: "name", label: "Category Name" },
   { key: "description", label: "Description" },
 ];
@@ -60,17 +60,17 @@ const goToAddCategory = () => {
 };
 
 // View category detail
-const viewCategory = (id: number) => {
+const viewCategory = (id: number | string) => {
   router.push(`/categories/${id}`);
 };
 
 // Edit category
-const editCategory = (id: number) => {
+const editCategory = (id: number | string) => {
   router.push(`/categories/${id}/edit`);
 };
 
 // Delete category with confirmation
-const deleteCategory = async (id: number) => {
+const deleteCategory = async (id: number | string) => {
   if (confirm("Are you sure you want to delete this category?")) {
     try {
       await categoryService.delete(id);

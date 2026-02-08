@@ -5,6 +5,8 @@ const categoryController = require("../controllers/categoryController");
 const {
   validateCategoryInput,
   validateCategoryUpdate,
+  validateObjectId,
+  validatePagination,
 } = require("../middleware/validator");
 
 // GET /categories - Get all categories with pagination

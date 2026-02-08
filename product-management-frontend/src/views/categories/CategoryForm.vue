@@ -49,11 +49,10 @@ import FormInput from "../../components/common/FormInput.vue";
 import { categoryService } from "../../services/categoryService";
 import { required } from "../../utils/validation";
 import type { CategoryFormData } from "../../types/category";
+import { showError, showSuccess } from "../../utils/toast";
 const router = useRouter();
 const route = useRoute();
-const categoryId = computed(() =>
-  route.params.id ? parseInt(route.params.id as string) : null,
-);
+const categoryId = computed(() => route.params.id as string | undefined);
 const isEditMode = computed(() => !!categoryId.value);
 
 // Form data
@@ -76,7 +75,7 @@ onMounted(async () => {
 });
 
 // Load category data
-const loadCategory = async (id: number) => {
+const loadCategory = async (id: string) => {
   try {
     const category = await categoryService.getById(id);
     if (category) {
@@ -85,7 +84,7 @@ const loadCategory = async (id: number) => {
     }
   } catch (error) {
     console.error("Error loading category:", error);
-    alert("Error loading category data");
+    showError("Error loading category data");
   }
 };
 
@@ -124,15 +123,15 @@ const handleSubmit = async () => {
   try {
     if (isEditMode.value && categoryId.value) {
       await categoryService.update(categoryId.value, formData);
-      alert("Category updated successfully");
+      showSuccess("Category updated successfully");
     } else {
       await categoryService.create(formData);
-      alert("Category added successfully");
+      showSuccess("Category added successfully");
     }
     router.push("/categories");
   } catch (error) {
     console.error("Error saving category:", error);
-    alert("Error saving data");
+    showError("Error saving data");
   }
 };
 
